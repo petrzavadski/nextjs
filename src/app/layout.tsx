@@ -1,5 +1,9 @@
-import Link from "next/link";
+// import Link from "next/link";
+"use client";
 import styles from "./styles.module.css";
+import { Header } from "./components/header/header";
+import { Footer } from "./components/footer/footer";
+import "./global.css";
 
 export default function RootLayout({
   children,
@@ -8,14 +12,13 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-      <header className={styles.header}>
-        <Link href={"/"}>Главная</Link>
-        <Link href={"/rackets"}>Ракетки</Link>
-      </header>
-      <body className={styles.content}>{children}</body>
-      <footer className={styles.footer}>
-        Магазин ракеток (с) Petr Zavadskii, 2026
-      </footer>
+      <body className={styles.content}>
+        <Header />
+        {/* <body className={styles.content}>{children}</body>
+         */}
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
