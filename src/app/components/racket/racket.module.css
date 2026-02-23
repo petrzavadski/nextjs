@@ -1,0 +1,147 @@
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #a2a8c5 0%, #e8e6e9 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  background: rgba(233, 230, 230, 0.845);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.image {
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  /* object-fit: cover; */
+  width: 700px;
+  height: 700px;
+  position: relative !important;
+}
+
+.image:hover {
+  transform: scale(1.05);
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border-left: 4px solid #667eea;
+}
+
+.infoItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(102, 126, 234, 0.2);
+}
+
+.label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #667eea;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.value {
+  font-size: 1.2rem;
+  color: #2d3748;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.description {
+  grid-column: 1 / -1;
+  background: white;
+  border-left: 4px solid #764ba2;
+}
+
+.description .value {
+  font-size: 1.1rem;
+  color: #4a5568;
+  line-height: 1.8;
+}
+
+.errorContainer,
+.notFoundContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.5rem;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .imageWrapper {
+    padding: 1rem;
+  }
+
+  .value {
+    font-size: 1rem;
+  }
+}
+
+.price {
+  font-size: 1.5rem;
+  color: #667eea;
+  font-weight: 700;
+}
+
+.name {
+  font-size: 1.8rem;
+  color: #f7fafc;
+  font-weight: 700;
+}
+
+.model {
+  font-family: "Courier New", monospace;
+  background: #f7fafc;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.year {
+  font-family: "Courier New", monospace;
+  color: #06f1dd;
+}
