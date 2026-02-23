@@ -4,8 +4,6 @@ import { getRackets } from "@/app/services/getRackets";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
-// import styles from "./rackets.module.css";
-
 const Rackets = async () => {
   const { isError, data } = await getRackets({ page: 1, limit: 20 });
 
