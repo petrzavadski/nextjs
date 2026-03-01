@@ -15,7 +15,9 @@ export const getTop10rackets = async (): Promise<Response<IRacket[]>> => {
         "Content-Type": "application/json",
       },
       // Для серверных компонентов Next.js
-      cache: "no-store",
+      next: {
+        tags: ["getTop10Rackets"],
+      },
     });
 
     console.log("🔵 Response status:", response.status);
