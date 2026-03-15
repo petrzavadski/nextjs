@@ -9,6 +9,11 @@
   z-index: 1;
 }
 
+/* Добавляем новый класс для ссылки Login */
+.loginLink {
+  margin-left: auto;
+}
+
 .header a {
   color: white;
   text-decoration: none;
