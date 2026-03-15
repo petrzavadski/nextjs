@@ -8,29 +8,53 @@
 }
 
 .imageWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 2rem;
-  background: rgba(233, 230, 230, 0.845);
-  border-radius: 20px;
-  padding: 2rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  display: inline-block;
+}
+
+.bookmark {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 0;
 }
 
 .image {
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
-  /* object-fit: cover; */
-  width: 700px;
-  height: 700px;
-  position: relative !important;
+  display: block; /* убирает лишние отступы */
+  width: 100%; /* адаптивная ширина, если нужно */
+  height: auto;
 }
 
-.image:hover {
-  transform: scale(1.05);
+.bookmarkButton {
+  display: inline-block;
+  padding: 12px 24px;
+  margin-top: 20px;
+  background-color: #0070f3; /* ярко-синий, как в Next.js */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bookmarkButton:hover {
+  background-color: #0051b3; /* темнее при наведении */
+}
+
+.bookmarkButton:active {
+  transform: scale(0.98); /* небольшой эффект нажатия */
+}
+
+.bookmarkButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .infoGrid {

@@ -3,6 +3,7 @@ import { FC } from "react";
 import Image from "next/image";
 import styles from "./racket.module.css";
 import { notFound } from "next/navigation";
+import { getUser } from "@/app/services/getUser";
 
 type Props = {
   id: string;
@@ -11,13 +12,30 @@ type Props = {
 export const Racket: FC<Props> = async ({ id }) => {
   const { isError, data } = await getRacketById(id);
 
+  let userLogin: string | undefined = undefined;
+  let isFavorite: boolean | undefined = undefined;
+
+  try {
+    const response = await getUser();
+    const userRawData = response.data;
+
+    userLogin = userRawData?.login;
+    isFavorite = userRawData?.userData?.isFavorite;
+
+    console.log(userRawData);
+  } catch (e) {
+    console.log(e);
+  }
+
   if (isError) {
     return (
       <div className={styles.errorContainer}>
-        <div>😕 Some error occurred. Please try again later.</div>
+        <div>😕 Ошибка!!!! Попробуйте еще раз!!!</div>
       </div>
     );
   }
+
+  // isFavorite = true;
 
   if (!data) {
     return notFound();
@@ -26,6 +44,17 @@ export const Racket: FC<Props> = async ({ id }) => {
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
+        {isFavorite && (
+          <Image
+            src={"/bookmark.png"}
+            alt={"bookmark"}
+            width={50}
+            height={50}
+            className={styles.bookmark}
+            unoptimized
+          />
+        )}
+
         <Image
           src={data.imageUrl}
           alt={data.name || "Racket image"}
@@ -70,6 +99,10 @@ export const Racket: FC<Props> = async ({ id }) => {
           <span className={styles.value}>{data.description}</span>
         </div>
       </div>
+
+      {userLogin && (
+        <button className={styles.bookmarkButton}>Добавить в избранное</button>
+      )}
     </div>
   );
 };
