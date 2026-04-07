@@ -1,0 +1,11 @@
+.logoutLink {
+  /* базовые стили ссылки */
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
+}
+
+.pending {
+  opacity: 0.5;
+  pointer-events: none;
+}

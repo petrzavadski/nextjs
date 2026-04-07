@@ -21,3 +21,16 @@ export const LoginSection = () => {
     <Link href="/login">Войти</Link>
   );
 };
+
+export const AuthSection = () => {
+  const context = use(UserContext);
+
+  if (!context) return <Link href="/login">Login</Link>;
+
+  const user = context.user;
+
+  if (!user) {
+    return <Link href={"/auth"}>Зарегистрироваться</Link>;
+  }
+  return null;
+};

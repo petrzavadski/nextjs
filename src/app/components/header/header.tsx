@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import styles from "./header.module.css";
 import { LoginSection } from "../loginSection/loginSection";
-import { AuthSection } from "../authSection/authSection";
+import { AuthSection } from "../loginSection/loginSection";
 
 export const Header = () => {
   return (

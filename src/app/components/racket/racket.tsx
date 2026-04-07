@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./racket.module.css";
 import { notFound } from "next/navigation";
 import { getUser } from "@/app/services/getUser";
+import { FavoriteButton } from "../favoriteButton/favoriteButton";
 
 type Props = {
   id: string;
@@ -12,30 +13,21 @@ type Props = {
 export const Racket: FC<Props> = async ({ id }) => {
   const { isError, data } = await getRacketById(id);
 
-  let userLogin: string | undefined = undefined;
   let isFavorite: boolean | undefined = undefined;
 
-  try {
-    const response = await getUser();
-    const userRawData = response.data;
+  const response = await getUser();
+  const userRawData = response.data;
 
-    userLogin = userRawData?.login;
-    isFavorite = userRawData?.userData?.isFavorite;
-
-    console.log(userRawData);
-  } catch (e) {
-    console.log(e);
-  }
+  isFavorite = userRawData?.userData?.isFavorite;
+  const userLogin = userRawData?.login; // передадим в клиентскую кнопку
 
   if (isError) {
     return (
       <div className={styles.errorContainer}>
-        <div>😕 Ошибка!!!! Попробуйте еще раз!!!</div>
+        <div>Ошибка!!!!</div>
       </div>
     );
   }
-
-  // isFavorite = true;
 
   if (!data) {
     return notFound();
@@ -100,9 +92,7 @@ export const Racket: FC<Props> = async ({ id }) => {
         </div>
       </div>
 
-      {userLogin && (
-        <button className={styles.bookmarkButton}>Добавить в избранное</button>
-      )}
+      <FavoriteButton userLogin={userLogin} />
     </div>
   );
 };

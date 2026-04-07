@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 const Rackets = async () => {
   const { isError, data } = await getRackets({ page: 1, limit: 20 });
 
-  console.log("data", data, "isError", isError);
+  // console.log("data", data, "isError", isError);
   if (isError) return "Error";
 
   if (!data) return notFound();

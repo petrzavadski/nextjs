@@ -4,13 +4,13 @@ import { IUser } from "../types/user";
 
 interface UserContextType {
   user: IUser | undefined;
-  login: (userData: IUser) => void;
-  logout: () => void;
+  logout: () => void; // добавляем метод для выхода
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
   undefined,
 );
+
 export const UserProvider = ({
   children,
   initialUser,
@@ -20,13 +20,11 @@ export const UserProvider = ({
 }) => {
   const [user, setUser] = useState<IUser | undefined>(initialUser);
 
-  const login = (userData: IUser) => {
-    setUser(userData);
-  };
+  const logout = () => setUser(undefined);
 
-  const logout = () => {
-    setUser(undefined);
-  };
-
-  return <UserContext value={{ user, login, logout }}>{children}</UserContext>;
+  return (
+    <UserContext.Provider value={{ user, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
 };

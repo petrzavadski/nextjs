@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import { use } from "react";
 
 const Page = () => {
-  const user = use(UserContext);
+  const context = use(UserContext);
+
+  const user = context?.user;
 
   if (!user?.isAdmin) {
     redirect("/403");

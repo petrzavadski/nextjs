@@ -1,35 +1,33 @@
 "use client";
-import { BASE_API_URL } from "@/app/constants/service";
 import { UserContext } from "@/app/providers/UserProvider";
 import Link from "next/link";
 import { use, useTransition } from "react";
+import styles from "./logoutButton.module.css";
+import { deleteUser } from "@/app/services/deleteUser";
+import { redirect } from "next/navigation";
 
-const handleLogout = async () => {
-  await fetch(`${BASE_API_URL}auth/logout`, {
-    credentials: "include",
-    method: "DELETE",
-  });
-};
 export const LogoutButton = () => {
-  const user = use(UserContext);
-
+  const handleLogout = async () => {
+    deleteUser();
+    logout();
+    redirect("/");
+  };
+  const context = use(UserContext);
   const [isPending, startTransition] = useTransition();
 
-  if (!user) {
-    return null;
-  }
+  if (!context) return null;
+  const { user, logout } = context;
+
+  if (!user) return null;
+
   return (
     <Link
       href="#"
       onClick={(e) => {
         e.preventDefault();
-        user.logout();
         startTransition(handleLogout);
       }}
-      style={{
-        pointerEvents: isPending ? "none" : "auto",
-        opacity: isPending ? 0.5 : 1,
-      }}
+      className={isPending ? styles.pending : styles.logoutLink}
     >
       Logout
     </Link>

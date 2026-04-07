@@ -14,11 +14,17 @@ export const loginAction = async (
 ) => {
   const login = formData.get("login")?.toString() ?? "";
 
-  const password = formData.get("password1")?.toString() ?? "";
+  const password1 = formData.get("password1")?.toString() ?? "";
+  const password2 = formData.get("password2")?.toString() ?? "";
+
+  if (password1 !== password2)
+    return { error: "Пароли не совпадают", redirectTo: undefined };
+  if (password1.length < 6)
+    return { error: "Пароль меньше 6 символов", redirectTo: undefined };
 
   const result = await fetch(`${BASE_API_URL}auth/signup`, {
     method: "POST",
-    body: JSON.stringify({ login, password }),
+    body: JSON.stringify({ login, password: password1 }),
     headers: { "Content-type": "application/json" },
   });
 
