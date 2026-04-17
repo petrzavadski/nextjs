@@ -1,30 +1,17 @@
-"use client";
-import { createContext, useState } from "react";
 import { IUser } from "../types/user";
+import { getUser } from "@/app/services/getUser";
+import { UserContext } from "./UserContext";
+import ClientUserProvider from "./ClientUserProvider";
 
-interface UserContextType {
-  user: IUser | undefined;
-  logout: () => void; // добавляем метод для выхода
-}
-
-export const UserContext = createContext<UserContextType | undefined>(
-  undefined,
-);
-
-export const UserProvider = ({
+export const UserProvider = async ({
   children,
-  initialUser,
 }: {
   children: React.ReactNode;
   initialUser?: IUser;
 }) => {
-  const [user, setUser] = useState<IUser | undefined>(initialUser);
+  const userResponse = await getUser();
+  const user = userResponse.data;
 
-  const logout = () => setUser(undefined);
-
-  return (
-    <UserContext.Provider value={{ user, logout }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <ClientUserProvider user={user}>{children}</ClientUserProvider>;
 };
+export { UserContext };

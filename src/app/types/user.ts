@@ -1,5 +1,5 @@
 export interface IUser {
-  login: string | undefined;
+  login: string;
   userData: { isFavorite: boolean };
   isAdmin: boolean;
 }

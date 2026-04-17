@@ -1,5 +1,4 @@
 "use client";
-
 import { UserContext } from "@/app/providers/UserProvider";
 import Link from "next/link";
 import { use } from "react";
@@ -15,6 +14,7 @@ export const LoginSection = () => {
   return user ? (
     <>
       <div>Hello, {user.login}</div>
+
       <LogoutButton />
     </>
   ) : (

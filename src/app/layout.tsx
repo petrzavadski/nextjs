@@ -21,8 +21,10 @@ export default async function RootLayout({
   const { data } = await getUser();
   return (
     <html lang="en">
-      <UserProvider initialUser={data}>
+      <head>
         <NextTopLoader />
+      </head>
+      <UserProvider initialUser={data}>
         <body className={styles.content}>
           <Header />
           {children}

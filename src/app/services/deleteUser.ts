@@ -5,9 +5,14 @@ import { IUser } from "../types/user";
 import { Response } from "../types/request";
 
 export const deleteUser = async (): Response<IUser> => {
-  const coockieStore = await cookies();
+  try {
+    const coockieStore = await cookies();
 
-  coockieStore.delete("user");
+    coockieStore.delete("user");
+  } catch (error) {
+    console.log(`Error deleting cookie1: ${error}`);
+  }
+
   const result = await fetch(`${BASE_API_URL}auth/logout`, {
     credentials: "include",
     method: "DELETE",

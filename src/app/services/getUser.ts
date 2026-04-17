@@ -1,3 +1,4 @@
+"use server";
 import { cookies } from "next/headers";
 import { BASE_API_URL } from "../constants/service";
 import { IUser } from "../types/user";
