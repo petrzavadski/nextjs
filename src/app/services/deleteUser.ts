@@ -5,18 +5,21 @@ import { IUser } from "../types/user";
 import { Response } from "../types/request";
 
 export const deleteUser = async (): Response<IUser> => {
-  try {
-    const coockieStore = await cookies();
+  const cookieStore = await cookies();
 
-    coockieStore.delete("user");
-  } catch (error) {
-    console.log(`Error deleting cookie1: ${error}`);
-  }
-
-  const result = await fetch(`${BASE_API_URL}auth/logout`, {
+  const result = await fetch(${BASE_API_URL}auth/logout, {
     credentials: "include",
+    headers: { Cookie: cookieStore.toString() },
     method: "DELETE",
   });
+
+  try {
+    cookieStore.delete("user");
+  } catch (error) {
+    console.log(Error deleting cookie1: ${error});
+  }
+
+  console.log("delete" + result.status);
 
   if (result.status == 401) {
     return { isError: false, data: undefined };
@@ -27,4 +30,4 @@ export const deleteUser = async (): Response<IUser> => {
   }
 
   return { isError: false, data: undefined };
-};
+}

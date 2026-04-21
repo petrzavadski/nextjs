@@ -113,7 +113,7 @@ export const getRackets = async ({
   const end = start + limit;
   const paginatedData = mockRackets.slice(start, end);
 
-  console.log("📦 Returning mock data:", paginatedData);
+  //console.log("📦 Returning mock data:", paginatedData);
 
   return {
     isError: false,

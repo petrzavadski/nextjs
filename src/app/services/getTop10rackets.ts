@@ -29,7 +29,7 @@ export const getTop10rackets = async (): Promise<Response<IRacket[]>> => {
 
     // Просто возвращаем JSON как есть (как в рабочем примере)
     const data = await response.json();
-    console.log("🔵 Data received:", data);
+    //console.log("🔵 Data received:", data);
 
     // В рабочем примере data - это уже массив?
     // Если API возвращает { products: [...] } или что-то подобное, адаптируйте:
