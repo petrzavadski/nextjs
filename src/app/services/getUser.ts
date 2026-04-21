@@ -13,7 +13,7 @@ export const getUser = async (): Response<IUser> => {
   });
 
   if (result.status == 401) {
-    return { isError: false, data: undefined };
+    return { isError: true, data: undefined };
   }
 
   if (result.status !== 200) {

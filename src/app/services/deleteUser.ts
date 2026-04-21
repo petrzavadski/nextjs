@@ -7,7 +7,7 @@ import { Response } from "../types/request";
 export const deleteUser = async (): Response<IUser> => {
   const cookieStore = await cookies();
 
-  const result = await fetch(${BASE_API_URL}auth/logout, {
+  const result = await fetch(`${BASE_API_URL}auth/logout`, {
     credentials: "include",
     headers: { Cookie: cookieStore.toString() },
     method: "DELETE",
@@ -16,7 +16,7 @@ export const deleteUser = async (): Response<IUser> => {
   try {
     cookieStore.delete("user");
   } catch (error) {
-    console.log(Error deleting cookie1: ${error});
+    console.log(`Error deleting cookie1: ${error}`);
   }
 
   console.log("delete" + result.status);
@@ -30,4 +30,4 @@ export const deleteUser = async (): Response<IUser> => {
   }
 
   return { isError: false, data: undefined };
-}
+};
