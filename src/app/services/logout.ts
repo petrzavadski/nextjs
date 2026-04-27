@@ -4,7 +4,7 @@ import { BASE_API_URL } from "../constants/service";
 import { IUser } from "../types/user";
 import { Response } from "../types/request";
 
-export const deleteUser = async (): Response<IUser> => {
+export const logout = async (): Response<IUser> => {
   const cookieStore = await cookies();
 
   const result = await fetch(`${BASE_API_URL}auth/logout`, {

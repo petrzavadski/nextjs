@@ -1,7 +1,7 @@
-import { deleteUser } from "@/app/services/deleteUser";
+import { logout } from "@/app/services/logout";
 import { redirect } from "next/navigation";
 
 export const handleLogout = async () => {
-  await deleteUser();
+  await logout();
   redirect("/");
 };
