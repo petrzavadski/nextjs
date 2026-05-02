@@ -1,0 +1,31 @@
+.bookmarkButton {
+  display: inline-block;
+  padding: 12px 24px;
+  margin-top: 20px;
+  background-color: #0070f3; /* ярко-синий, как в Next.js */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bookmarkButton:hover {
+  background-color: #0051b3; /* темнее при наведении */
+}
+
+.bookmarkButton:active {
+  transform: scale(0.98); /* небольшой эффект нажатия */
+}
+
+.bookmarkButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

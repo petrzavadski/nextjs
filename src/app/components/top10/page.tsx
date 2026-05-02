@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 const Top10 = async () => {
   const { isError, data } = await getTop10rackets();
 
-  console.log("data", data, "isError", isError);
+  // console.log("data", data, "isError", isError);
   if (isError) return "Error";
 
   if (!data) return notFound();
