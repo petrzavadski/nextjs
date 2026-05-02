@@ -15,8 +15,6 @@ export const LogoutButton = () => {
 
   if (!user) return null;
 
-  console.log("logOutButton user- ", user);
-
   return (
     <Link
       href="#"

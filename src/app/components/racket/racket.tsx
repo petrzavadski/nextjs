@@ -33,6 +33,9 @@ export const Racket: FC<Props> = async ({ id }) => {
     return notFound();
   }
 
+  console.log({data});
+  console.log('isFavorite ', isFavorite);
+
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
@@ -92,7 +95,7 @@ export const Racket: FC<Props> = async ({ id }) => {
         </div>
       </div>
 
-      <FavoriteButton userLogin={userLogin} />
+      <FavoriteButton userLogin={userLogin} rackeId={data.id} isFavorite={Boolean(isFavorite)}/>
     </div>
   );
 };
