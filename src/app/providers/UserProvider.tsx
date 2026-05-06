@@ -2,6 +2,7 @@ import { IUser } from "../types/user";
 import { getUser } from "@/app/services/getUser";
 import { UserContext } from "./UserContext";
 import ClientUserProvider from "./ClientUserProvider";
+import { FavoriteProvider } from "./FavoriteProvider";
 
 export const UserProvider = async ({
   children,
@@ -12,6 +13,10 @@ export const UserProvider = async ({
   const userResponse = await getUser();
   const user = userResponse.data;
 
-  return <ClientUserProvider user={user}>{children}</ClientUserProvider>;
+  return (
+    <FavoriteProvider>
+      <ClientUserProvider user={user}>{children}</ClientUserProvider>
+    </FavoriteProvider>
+  );
 };
 export { UserContext };

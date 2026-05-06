@@ -1,45 +1,86 @@
 "use client";
 
-import { use } from "react";
+import { use, useTransition, useCallback } from "react";
 import { UserContext } from "@/app/providers/UserProvider";
 import styles from "./favoriteButton.module.css";
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
+import { handleFavorite } from "./handleClick";
+import {
+  useSetIsFavorite,
+  useIsFavoriteById,
+} from "@/app/providers/FavoriteProvider";
 
 type Props = {
   userLogin?: string;
-  rackeId: number;
+  racketId: string;
   isFavorite: boolean;
 };
 
-const handleFavorite = async ({isFavorite: racketId}: Props) =>{
-  const url = `{BASE_API_URL}/product/${racketId}/favorite`;
-
-  return fetch(url, {
-    credentials: "include",
-    method: isFavorite ? "DELETE" : "POST"
-  })
-}
-
-export const FavoriteButton: FC<Props> = ({ userLogin, rackeId, isFavorite :isFavoriteInitial}: Props) => {
+export const FavoriteButton: FC<Props> = ({
+  userLogin,
+  racketId,
+  isFavorite: isFavoriteInitial,
+}) => {
+  const setIsFavorite = useSetIsFavorite();
   const context = use(UserContext);
   const user = context?.user;
 
-  // Показываем кнопку только если пользователь авторизован
+  // Используем глобальное состояние для надежности
+  const globalIsFavorite = useIsFavoriteById({
+    id: racketId,
+    isFavoriteInitial: isFavoriteInitial,
+  });
+
+  // Локальное состояние для оптимистичного обновления
+  const [optimisticIsFavorite, setOptimisticIsFavorite] =
+    useState(globalIsFavorite);
+
+  // Синхронизируем локальное состояние с глобальным
+  useEffect(() => {
+    setOptimisticIsFavorite(globalIsFavorite);
+  }, [globalIsFavorite]);
+
+  const [isPending, startTransition] = useTransition();
+
+  const handleClick = useCallback(() => {
+    if (isPending) return; // Предотвращаем множественные клики
+
+    startTransition(async () => {
+      const newFavoriteState = !optimisticIsFavorite;
+
+      // Оптимистичное обновление UI
+      setOptimisticIsFavorite(newFavoriteState);
+
+      // Отправка запроса на сервер
+      const response = await handleFavorite({
+        racketId,
+        isFavorite: newFavoriteState,
+      });
+
+      if (response?.ok) {
+        // Если запрос успешен - обновляем глобальное состояние
+        setIsFavorite({ id: racketId, isFavorite: newFavoriteState });
+      } else {
+        // Если ошибка - откатываем
+        console.error("Ошибка при сохранении:", response?.message);
+        setOptimisticIsFavorite(!newFavoriteState);
+      }
+    });
+  }, [optimisticIsFavorite, racketId, setIsFavorite, isPending]);
+
   if (!user || !userLogin) return null;
 
-  const [isFavorite, setIsFavorite] = useState(isFavoriteInitial);
-  const [isPendind, startTransition] = useTransition();
-
-   const handleClick = useCallback(async ({rackeId, isFavorite}: Props)=>{
-
- startTransition(async()=>{
-    await handleFavorite({rackeId, isFavorite});
-    setIsFavorite(!isFavorite)
-  })
-
-  }, []);
   return (
-    <button disabled={isPendind} onClick={()=>handleClick({rackeId, isFavorite})} className={styles.bookmarkButton}>{isFavorite? "Удалить из избранного" : "Добавить в избранное"}</button>
+    <button
+      disabled={isPending}
+      onClick={handleClick}
+      className={`${styles.bookmarkButton} ${isPending ? styles.pending : ""}`}
+    >
+      {isPending
+        ? "Загрузка..."
+        : optimisticIsFavorite
+          ? "Удалить из избранного"
+          : "Добавить в избранное"}
+    </button>
   );
 };
- 
