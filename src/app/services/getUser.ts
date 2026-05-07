@@ -5,11 +5,11 @@ import { IUser } from "../types/user";
 import { Response } from "../types/request";
 
 export const getUser = async (): Response<IUser> => {
-  const coockieStore = await cookies();
+  const cookieStore = await cookies();
 
   const result = await fetch(`${BASE_API_URL}auth/user`, {
     credentials: "include",
-    headers: { Cookie: coockieStore.toString() },
+    headers: { Cookie: cookieStore.toString() },
   });
 
   if (result.status == 401) {

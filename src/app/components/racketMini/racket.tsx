@@ -16,7 +16,7 @@ export const RacketMini: FC<Props> = async ({ id }) => {
   if (isError) {
     return (
       <div className={styles.errorContainer}>
-        <div>😕 Some error occurred. Please try again later.</div>
+        <div>Some error occurred. Please try again later.</div>
       </div>
     );
   }

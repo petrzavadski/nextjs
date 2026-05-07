@@ -9,6 +9,7 @@ export const getRacketById = async (racketId: string): Response<IRacket> => {
   const result = await fetch(`${BASE_API_URL}/product/${racketId}`, {
     next: { revalidate: 20 },
     credentials: "include",
+    cache: "no-store", // отключаем кэш
     headers: {
       Cookie: cookieStore.toString(),
     },

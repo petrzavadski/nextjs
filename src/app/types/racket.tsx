@@ -6,4 +6,5 @@ export interface IRacket {
   model: string;
   year: number;
   description: string;
+  userData: { isFavorite: boolean };
 }
