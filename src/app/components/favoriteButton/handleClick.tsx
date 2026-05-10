@@ -9,25 +9,18 @@ type Props = {
 };
 
 export const handleFavorite = async ({ racketId, isFavorite }: Props) => {
-  const url = `${BASE_API_URL}/product/${racketId}/favorite`;
+  const url = `${BASE_API_URL}product/${racketId}/favorite`;
   const cookieStore = await cookies();
-  const cookieString = cookieStore.toString();
-
-  console.log("=== FAVORITE ACTION ===");
-  console.log("racketId:", racketId);
-  console.log("isFavorite:", isFavorite);
-  console.log("method:", isFavorite ? "DELETE" : "POST");
-  console.log("Cookies string:", cookieString);
-  console.log("Full URL:", url);
 
   try {
     const response = await fetch(url, {
-      method: isFavorite ? "DELETE" : "POST",
+      credentials: "include",
+      cache: "no-store", // отключаем кэш
+      method: isFavorite ? "POST" : "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Cookie: cookieString,
+        Cookie: cookieStore.toString(),
       },
-      credentials: "include",
     });
 
     console.log("Response status:", response.status);

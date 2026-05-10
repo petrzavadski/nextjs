@@ -16,11 +16,7 @@ export const LogoutButton = () => {
   if (!user) return null;
 
   return (
-<<<<<<< Updated upstream
     <span
-=======
-    <button
->>>>>>> Stashed changes
       onClick={(e) => {
         e.preventDefault();
         startTransition(handleLogout);
@@ -28,10 +24,6 @@ export const LogoutButton = () => {
       className={isPending ? styles.pending : styles.logoutLink}
     >
       Logout
-<<<<<<< Updated upstream
     </span>
-=======
-    </button>
->>>>>>> Stashed changes
   );
 };
