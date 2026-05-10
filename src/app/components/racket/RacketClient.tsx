@@ -24,11 +24,6 @@ export const RacketClient: FC<Props> = ({
   userLogin,
   serverIsFavorite,
 }) => {
-  console.log({ id });
-  console.log({ data });
-  console.log({ userLogin });
-  console.log({ serverIsFavorite });
-
   // Хидратируем начальное состояние
   useHydrateFavorite({ id, isFavorite: serverIsFavorite });
 

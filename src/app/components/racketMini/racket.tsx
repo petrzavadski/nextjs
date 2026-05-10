@@ -5,6 +5,8 @@ import styles from "./racket.module.css";
 import Link from "next/link";
 import { BASE_CLIENT_URL } from "@/app/constants/service";
 import { notFound } from "next/navigation";
+import { FavoriteButton } from "../favoriteButton/favoriteButton";
+import { getUser } from "@/app/services/getUser";
 
 type Props = {
   id: string;
@@ -12,11 +14,30 @@ type Props = {
 
 export const RacketMini: FC<Props> = async ({ id }) => {
   const { isError, data } = await getRacketById(id);
+  if (isError) {
+    return (
+      <div className={styles.errorContainer}>
+        <div>Ошибка!!!!</div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return notFound();
+  }
+
+  const isFavorite = data?.userData?.isFavorite;
+
+  const response = await getUser();
+  const userRawData = response.data;
+  const userLogin = userRawData?.login;
+
+  // if (!userLogin) return;
 
   if (isError) {
     return (
       <div className={styles.errorContainer}>
-        <div>Some error occurred. Please try again later.</div>
+        <div>Ошибка!!!!</div>
       </div>
     );
   }
@@ -28,6 +49,16 @@ export const RacketMini: FC<Props> = async ({ id }) => {
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
+        {isFavorite && (
+          <Image
+            src={"/bookmark.png"}
+            alt={"bookmark"}
+            width={50}
+            height={50}
+            className={styles.bookmark}
+            unoptimized
+          />
+        )}
         <Link href={`${BASE_CLIENT_URL}${id}`}>
           <Image
             src={data.imageUrl}
@@ -40,6 +71,14 @@ export const RacketMini: FC<Props> = async ({ id }) => {
         </Link>
       </div>
       <div className={styles.value}>Модель ракетки: {data.name}</div>
+
+      {userLogin && (
+        <FavoriteButton
+          userLogin={userLogin}
+          racketId={id}
+          isFavorite={isFavorite}
+        />
+      )}
     </div>
   );
 };

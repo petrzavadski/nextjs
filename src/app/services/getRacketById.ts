@@ -6,8 +6,7 @@ import { Response } from "../types/request";
 export const getRacketById = async (racketId: string): Response<IRacket> => {
   const cookieStore = await cookies();
 
-  const result = await fetch(`${BASE_API_URL}/product/${racketId}`, {
-    next: { revalidate: 20 },
+  const result = await fetch(`${BASE_API_URL}product/${racketId}`, {
     credentials: "include",
     cache: "no-store", // отключаем кэш
     headers: {
