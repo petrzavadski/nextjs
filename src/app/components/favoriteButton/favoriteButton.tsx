@@ -3,7 +3,6 @@
 import { use, useTransition, useCallback, useOptimistic } from "react";
 import { UserContext } from "@/app/providers/UserProvider";
 import styles from "./favoriteButton.module.css";
-// import { FC, useState, useEffect } from "react";
 import { FC } from "react";
 
 import { handleFavorite } from "./handleClick";
@@ -85,11 +84,6 @@ export const FavoriteButton: FC<Props> = ({
         onClick={handleClick}
         className={`${styles.bookmarkButton} ${isPending ? styles.pending : ""}`}
       >
-        {/* {isPending
-        ? "Загрузка"
-        : optimisticIsFavorite
-          ? "Удалить из избранного"
-          : "Добавить в избранное"} */}
         {optimisticIsFavorite
           ? "Удалить из избранного"
           : "Добавить в избранное"}

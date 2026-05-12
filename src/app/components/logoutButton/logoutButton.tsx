@@ -16,7 +16,7 @@ export const LogoutButton = () => {
   if (!user) return null;
 
   return (
-    <span
+    <button
       onClick={(e) => {
         e.preventDefault();
         startTransition(handleLogout);
@@ -24,6 +24,6 @@ export const LogoutButton = () => {
       className={isPending ? styles.pending : styles.logoutLink}
     >
       Logout
-    </span>
+    </button>
   );
 };
