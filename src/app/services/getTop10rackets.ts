@@ -3,18 +3,16 @@ import { Response } from "../types/request";
 import { BASE_API_URL } from "../constants/service";
 
 export const getTop10rackets = async (): Promise<Response<IRacket[]>> => {
-  // Используем правильный URL с /api/
   const url = `${BASE_API_URL}top-10`;
 
   console.log("🔵 Fetching from:", url);
 
   try {
     const response = await fetch(url, {
-      // Добавляем заголовки как в рабочем примере
       headers: {
         "Content-Type": "application/json",
       },
-      // Для серверных компонентов Next.js
+
       next: {
         tags: ["getTop10Rackets"],
       },
@@ -27,12 +25,7 @@ export const getTop10rackets = async (): Promise<Response<IRacket[]>> => {
       return { isError: true, data: undefined };
     }
 
-    // Просто возвращаем JSON как есть (как в рабочем примере)
     const data = await response.json();
-    //console.log("🔵 Data received:", data);
-
-    // В рабочем примере data - это уже массив?
-    // Если API возвращает { products: [...] } или что-то подобное, адаптируйте:
 
     return {
       isError: false,

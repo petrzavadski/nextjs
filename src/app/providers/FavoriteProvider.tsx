@@ -3,13 +3,12 @@ import {
   createContext,
   FC,
   PropsWithChildren,
-  useContext, // Изменено: используем useContext вместо use
+  useContext,
   useEffect,
   useState,
 } from "react";
 import { IRacket } from "../types/racket";
 
-// Исправлен тип - убираем вложенность
 type SetFavoriteType = {
   id: IRacket["id"];
   isFavorite?: boolean;
@@ -20,7 +19,6 @@ type FavoriteContextType = {
   setFavorite: (params: SetFavoriteType) => void;
 };
 
-// Добавляем значение по умолчанию
 export const FavoriteContext = createContext<FavoriteContextType>({
   favorites: {},
   setFavorite: () => {},
@@ -49,7 +47,6 @@ export const FavoriteProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-// Исправлен хук для хидратации
 export const useHydrateFavorite = ({ id, isFavorite }: SetFavoriteType) => {
   const setFavorite = useSetIsFavorite();
 
@@ -63,13 +60,11 @@ export const useHydrateFavorite = ({ id, isFavorite }: SetFavoriteType) => {
   }, [id, isFavorite, setFavorite]);
 };
 
-// Исправлен хук для получения функции установки
 export const useSetIsFavorite = () => {
   const { setFavorite } = useContext(FavoriteContext);
   return setFavorite;
 };
 
-// Исправлен хук для получения значения isFavorite
 export const useIsFavoriteById = ({
   id,
   isFavoriteInitial,

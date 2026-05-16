@@ -1,6 +1,5 @@
 "use client";
 import { UserContext } from "@/app/providers/UserProvider";
-// import Link from "next/link";
 import { use, useTransition } from "react";
 import styles from "./logoutButton.module.css";
 import { useLogout } from "./handleLogout";

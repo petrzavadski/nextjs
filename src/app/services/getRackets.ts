@@ -14,12 +14,10 @@ export const getRackets = async ({
   const url = `${BASE_API_URL}products?page=${page}&limit=${limit}`;
 
   const response = await fetch(url, {
-    // Добавляем заголовки как в рабочем примере
     headers: {
       "Content-Type": "application/json",
     },
 
-    // Для серверных компонентов Next.js
     next: {
       tags: ["getRackets"],
     },

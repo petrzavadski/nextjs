@@ -27,7 +27,6 @@ export const handleFavorite = async ({ racketId, isFavorite }: Props) => {
     console.log("Response statusText:", response.statusText);
 
     const text = await response.text();
-    console.log("Response body:", text);
 
     let data = {};
     try {

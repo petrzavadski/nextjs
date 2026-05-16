@@ -1,4 +1,3 @@
-// D:\nextjs\src\app\providers\ClientUserProvider.tsx
 "use client";
 
 import { UserContext } from "./UserContext";
