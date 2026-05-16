@@ -57,3 +57,8 @@ export const handleFavorite = async ({ racketId, isFavorite }: Props) => {
     };
   }
 };
+
+export const revaliator = async (id: string) => {
+  revalidatePath(`/racket/${id}`);
+  revalidatePath("/");
+};

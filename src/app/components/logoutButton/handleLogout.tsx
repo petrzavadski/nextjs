@@ -1,7 +1,16 @@
+"use client";
 import { logout } from "@/app/services/logout";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
-export const handleLogout = async () => {
-  await logout();
-  redirect("/");
+export const useLogout = () => {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+
+    router.refresh();
+    redirect("/");
+  };
+
+  return handleLogout;
 };

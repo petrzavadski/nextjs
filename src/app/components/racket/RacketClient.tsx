@@ -1,4 +1,3 @@
-// [D:\nextjs\src\app\components\racket\RacketClient.tsx]
 "use client";
 
 import { FC } from "react";
@@ -10,6 +9,8 @@ import {
   useIsFavoriteById,
 } from "@/app/providers/FavoriteProvider";
 import { IRacket } from "@/app/types/racket";
+import { Icon } from "../icon/icon";
+import { useRouter } from "next/navigation";
 
 type Props = {
   id: string;
@@ -33,19 +34,13 @@ export const RacketClient: FC<Props> = ({
     isFavoriteInitial: serverIsFavorite,
   });
 
+  const router = useRouter();
+  router.refresh();
+
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
-        {isFavorite && (
-          <Image
-            src={"/bookmark.png"}
-            alt={"bookmark"}
-            width={50}
-            height={50}
-            className={styles.bookmark}
-            unoptimized
-          />
-        )}
+        <Icon racketId={id} isFavoriteInitial={isFavorite} />
 
         <Image
           src={data.imageUrl}

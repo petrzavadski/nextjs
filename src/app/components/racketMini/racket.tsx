@@ -7,6 +7,7 @@ import { BASE_CLIENT_URL } from "@/app/constants/service";
 import { notFound } from "next/navigation";
 import { FavoriteButton } from "../favoriteButton/favoriteButton";
 import { getUser } from "@/app/services/getUser";
+import { Icon } from "../icon/icon";
 
 type Props = {
   id: string;
@@ -14,6 +15,7 @@ type Props = {
 
 export const RacketMini: FC<Props> = async ({ id }) => {
   const { isError, data } = await getRacketById(id);
+
   if (isError) {
     return (
       <div className={styles.errorContainer}>
@@ -32,8 +34,6 @@ export const RacketMini: FC<Props> = async ({ id }) => {
   const userRawData = response.data;
   const userLogin = userRawData?.login;
 
-  // if (!userLogin) return;
-
   if (isError) {
     return (
       <div className={styles.errorContainer}>
@@ -49,16 +49,7 @@ export const RacketMini: FC<Props> = async ({ id }) => {
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
-        {isFavorite && (
-          <Image
-            src={"/bookmark.png"}
-            alt={"bookmark"}
-            width={50}
-            height={50}
-            className={styles.bookmark}
-            unoptimized
-          />
-        )}
+        <Icon racketId={id} isFavoriteInitial={isFavorite} />
         <Link href={`${BASE_CLIENT_URL}${id}`}>
           <Image
             src={data.imageUrl}

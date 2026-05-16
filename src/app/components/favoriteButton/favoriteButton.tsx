@@ -1,15 +1,14 @@
 "use client";
 
-import { use, useTransition, useCallback, useOptimistic } from "react";
+import { use, useCallback, useState } from "react";
 import { UserContext } from "@/app/providers/UserProvider";
 import styles from "./favoriteButton.module.css";
 import { FC } from "react";
-
-import { handleFavorite } from "./handleClick";
 import {
   useSetIsFavorite,
   useIsFavoriteById,
 } from "@/app/providers/FavoriteProvider";
+import { handleFavorite, revaliator } from "./handleClick";
 
 type Props = {
   racketId: string;
@@ -23,72 +22,58 @@ export const FavoriteButton: FC<Props> = ({
   isFavorite: isFavoriteInitial,
 }) => {
   const setIsFavorite = useSetIsFavorite();
-
   const context = use(UserContext);
   const user = context?.user;
 
   // Используем глобальное состояние для надежности
-  const globalIsFavorite = useIsFavoriteById({
+  const isFavorite = useIsFavoriteById({
     id: racketId,
-    isFavoriteInitial: isFavoriteInitial,
+    isFavoriteInitial,
   });
 
-  // Локальное состояние для оптимистичного обновления
-  const [optimisticIsFavorite, setOptimisticIsFavorite] = useOptimistic(
-    globalIsFavorite,
-    (_current: boolean, newFavorite: boolean) => newFavorite,
-  );
+  const [isPending, setIsPending] = useState(false);
 
-  // Синхронизируем локальное состояние с глобальным
+  const handleClick = useCallback(async () => {
+    if (isPending) return;
 
-  const [isPending, startTransition] = useTransition();
+    const newFavoriteState = !isFavorite;
 
-  const handleClick = useCallback(() => {
-    if (isPending) return; // Предотвращаем множественные клики
+    setIsFavorite({ id: racketId, isFavorite: newFavoriteState });
 
-    startTransition(async () => {
-      const newFavoriteState = !optimisticIsFavorite;
+    setIsPending(true);
 
-      // Оптимистичное обновление UI
-      setOptimisticIsFavorite(newFavoriteState);
-
+    try {
       // Отправка запроса на сервер
       const response = await handleFavorite({
         racketId,
         isFavorite: newFavoriteState,
       });
 
-      if (response?.ok) {
-        // Если запрос успешен - обновляем глобальное состояние
-        setIsFavorite({ id: racketId, isFavorite: newFavoriteState });
-      } else {
-        // Если ошибка - откатываем
+      if (!response?.ok) {
         console.error("Ошибка при сохранении:", response?.message);
-        setOptimisticIsFavorite(!newFavoriteState);
+        setIsFavorite({ id: racketId, isFavorite: isFavorite });
       }
-    });
-  }, [
-    optimisticIsFavorite,
-    racketId,
-    setIsFavorite,
-    isPending,
-    setOptimisticIsFavorite,
-  ]);
+    } catch (error) {
+      console.error("Ошибка при сохранении:", error);
+      setIsFavorite({ id: racketId, isFavorite: isFavorite });
+    } finally {
+      revaliator(racketId);
+      setIsPending(false);
+    }
+  }, [isFavorite, racketId, isPending, setIsFavorite]);
 
   if (!user || !userLogin) return null;
 
   return (
     <div>
       <button
-        // disabled={isPending}
         onClick={handleClick}
+        disabled={isPending}
         className={`${styles.bookmarkButton} ${isPending ? styles.pending : ""}`}
       >
-        {optimisticIsFavorite
-          ? "Удалить из избранного"
-          : "Добавить в избранное"}
+        {isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
       </button>
-      <span>{isPending ? " ...Загрузка" : ""}</span>
+      {isPending && <span> ...Загрузка</span>}
     </div>
   );
 };
