@@ -3,9 +3,11 @@ import { UserContext } from "@/app/providers/UserProvider";
 import Link from "next/link";
 import { use } from "react";
 import { LogoutButton } from "../logoutButton/logoutButton";
+import { useRouter } from "next/navigation";
 
 export const LoginSection = () => {
   const context = use(UserContext);
+  const router = useRouter();
 
   if (!context) return <Link href="/login">Login</Link>;
 
@@ -18,7 +20,7 @@ export const LoginSection = () => {
       <LogoutButton />
     </>
   ) : (
-    <Link href="/login">Войти</Link>
+    <button onClick={() => router.push("/login")}>Войти</button>
   );
 };
 

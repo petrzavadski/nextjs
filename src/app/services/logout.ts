@@ -19,8 +19,6 @@ export const logout = async (): Response<IUser> => {
     console.log(`Error deleting cookie1: ${error}`);
   }
 
-  console.log("delete" + result.status);
-
   if (result.status == 401) {
     return { isError: false, data: undefined };
   }

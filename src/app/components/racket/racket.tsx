@@ -1,10 +1,11 @@
 import { getRacketById } from "@/app/services/getRacketById";
 import { FC } from "react";
-import Image from "next/image";
 import styles from "./racket.module.css";
 import { notFound } from "next/navigation";
 import { getUser } from "@/app/services/getUser";
+import { Icon } from "../icon/icon";
 import { FavoriteButton } from "../favoriteButton/favoriteButton";
+import Image from "next/image";
 
 type Props = {
   id: string;
@@ -13,13 +14,23 @@ type Props = {
 export const Racket: FC<Props> = async ({ id }) => {
   const { isError, data } = await getRacketById(id);
 
-  let isFavorite: boolean | undefined = undefined;
+  if (isError) {
+    return (
+      <div className={styles.errorContainer}>
+        <div>Ошибка!!!!</div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return notFound();
+  }
+
+  const isFavorite = data?.userData?.isFavorite;
 
   const response = await getUser();
   const userRawData = response.data;
-
-  isFavorite = userRawData?.userData?.isFavorite;
-  const userLogin = userRawData?.login; // передадим в клиентскую кнопку
+  const userLogin = userRawData?.login;
 
   if (isError) {
     return (
@@ -36,63 +47,51 @@ export const Racket: FC<Props> = async ({ id }) => {
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
-        {isFavorite && (
-          <Image
-            src={"/bookmark.png"}
-            alt={"bookmark"}
-            width={50}
-            height={50}
-            className={styles.bookmark}
-            unoptimized
-          />
-        )}
+        <Icon racketId={id} isFavoriteInitial={isFavorite} />
 
         <Image
           src={data.imageUrl}
           alt={data.name || "Racket image"}
-          width={700}
-          height={700}
+          width={0}
+          height={0}
           className={styles.image}
           unoptimized
         />
       </div>
 
-      <div className={styles.infoGrid}>
-        <div className={`${styles.infoItem} ${styles.name}`}>
-          <span className={styles.label}>Наименование</span>
-          <span className={styles.value}>{data.name}</span>
-        </div>
-
-        <div className={styles.infoItem}>
-          <span className={styles.label}>Цена</span>
-          <span className={`${styles.value} ${styles.price}`}>
-            {new Intl.NumberFormat("ru-RU", {
-              style: "currency",
-              currency: "RUB",
-              minimumFractionDigits: 0,
-            }).format(data.price)}
-          </span>
-        </div>
-
-        <div className={styles.infoItem}>
-          <span className={styles.label}>Модель</span>
-          <span className={`${styles.value} ${styles.model}`}>
-            {data.model}
-          </span>
-        </div>
-
-        <div className={styles.infoItem}>
-          <span className={styles.label}>Год выпуска</span>
-          <span className={`${styles.value} ${styles.year}`}>{data.year}</span>
-        </div>
-
-        <div className={`${styles.infoItem} ${styles.description}`}>
-          <span className={styles.label}>Описание</span>
-          <span className={styles.value}>{data.description}</span>
-        </div>
+      <div className={styles.infoItem}>
+        <span className={styles.label}>Цена</span>
+        <span className={`${styles.value} ${styles.price}`}>
+          {new Intl.NumberFormat("ru-RU", {
+            style: "currency",
+            currency: "RUB",
+            minimumFractionDigits: 0,
+          }).format(data.price)}
+        </span>
       </div>
 
-      <FavoriteButton userLogin={userLogin} />
+      <div className={styles.infoItem}>
+        <span className={styles.label}>Модель</span>
+        <span className={`${styles.value} ${styles.model}`}>{data.model}</span>
+      </div>
+
+      <div className={styles.infoItem}>
+        <span className={styles.label}>Год выпуска</span>
+        <span className={`${styles.value} ${styles.year}`}>{data.year}</span>
+      </div>
+
+      <div className={`${styles.infoItem} ${styles.description}`}>
+        <span className={styles.label}>Описание</span>
+        <span className={styles.value}>{data.description}</span>
+      </div>
+
+      {userLogin && (
+        <FavoriteButton
+          userLogin={userLogin}
+          racketId={id}
+          isFavorite={isFavorite}
+        />
+      )}
     </div>
   );
 };

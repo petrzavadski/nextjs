@@ -2,7 +2,7 @@
 import styles from "./styles.module.css";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
-import "./global.css";
+// import "./globals.css";
 import { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { getUser } from "./services/getUser";

@@ -1,11 +1,12 @@
 "use client";
 import { UserContext } from "@/app/providers/UserProvider";
-import Link from "next/link";
 import { use, useTransition } from "react";
 import styles from "./logoutButton.module.css";
-import { handleLogout } from "./handleLogout";
+import { useLogout } from "./handleLogout";
 
 export const LogoutButton = () => {
+  const logout = useLogout();
+
   const context = use(UserContext);
   const [isPending, startTransition] = useTransition();
 
@@ -15,18 +16,15 @@ export const LogoutButton = () => {
 
   if (!user) return null;
 
-  console.log("logOutButton user- ", user);
-
   return (
-    <Link
-      href="#"
+    <button
       onClick={(e) => {
         e.preventDefault();
-        startTransition(handleLogout);
+        startTransition(logout);
       }}
       className={isPending ? styles.pending : styles.logoutLink}
     >
       Logout
-    </Link>
+    </button>
   );
 };

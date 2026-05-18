@@ -1,4 +1,3 @@
-// components/selection/selection.tsx
 import { FC, ReactNode } from "react";
 import styles from "./selection.module.css";
 
