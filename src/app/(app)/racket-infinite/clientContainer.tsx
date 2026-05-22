@@ -2,27 +2,35 @@
 import { IRacket } from "@/app/types/racket";
 import useSWRInfinite from "swr/infinite";
 import { getKey } from "./get-key";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { LIMIT } from "./constants";
-import Rackets from "../rackets/page";
-import { fetcher } from "./serverContainer";
+import { Scroller } from "./scroller";
+import { fetcher } from "@/app/lib/fetcher";
 
 type Props = {
   initialDate: IRacket[] | undefined;
+
+  children?: ReactNode;
+  userLogin: string | undefined;
 };
 
-export const RacketInfiniteContainer: FC<Props> = ({ initialDate }) => {
+export const RacketInfiniteContainer: FC<Props> = ({
+  initialDate,
+  userLogin,
+  children,
+}) => {
   const { data, error, isLoading, size, setSize } = useSWRInfinite<IRacket[]>(
-    getKey(initialDate),
+    getKey,
     fetcher,
     {
       revalidateFirstPage: false,
       revalidateIfStale: false,
       parallel: true,
+      fallbackData: initialDate ? [initialDate] : undefined,
     },
   );
 
-  const products: IRacket[] = data ? ([] as IRacket[]).concat(...data) : [];
+  const rackets: IRacket[] = data ? ([] as IRacket[]).concat(...data) : [];
 
   const isLoadingMore =
     isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
@@ -31,23 +39,25 @@ export const RacketInfiniteContainer: FC<Props> = ({ initialDate }) => {
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.length < LIMIT);
 
-  if (isLoading && !products.length) {
-    return "initial loading";
+  if (isLoading && !rackets.length) {
+    return `initial loading`;
   }
   if (error) {
     return "some error";
   }
 
   if (isEmpty) return "is Empty";
-  return (
-    <div>
-      <Rackets />
 
-      {isReachingEnd && (
-        <button disabled={isLoadingMore} onClick={() => setSize(size + 1)}>
-          Загрузить еще...
-        </button>
-      )}
-    </div>
+  return (
+    <Scroller
+      isReachingEnd={isReachingEnd}
+      isLoadingMore={isLoadingMore}
+      setSize={setSize}
+      size={size}
+      rackets={rackets}
+      userLogin={userLogin}
+    >
+      {children}
+    </Scroller>
   );
 };

@@ -24,3 +24,9 @@ export const getUser = async (): Response<IUser> => {
 
   return { isError: false, data: data.user };
 };
+
+export const getUserLogin = async (): Promise<string | undefined> => {
+  const response = await getUser();
+  const userRawData = response.data;
+  return userRawData?.login;
+};

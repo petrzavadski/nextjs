@@ -1,4 +1,5 @@
 export interface IRacket {
+  length: number;
   id: string;
   imageUrl: string;
   name: string;
