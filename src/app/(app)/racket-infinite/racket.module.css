@@ -187,3 +187,7 @@
   transform: none;
   box-shadow: none;
 }
+
+.father {
+  text-align: center;
+}
