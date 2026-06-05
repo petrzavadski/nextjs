@@ -5,7 +5,7 @@ import { getKey } from "./get-key";
 import { FC, ReactNode } from "react";
 import { LIMIT } from "./constants";
 import { Scroller } from "./scroller";
-import { fetcher } from "@/app/lib/fetcher";
+import { fetcherInfinite } from "@/app/lib/fetcher";
 
 type Props = {
   initialDate: IRacket[] | undefined;
@@ -21,7 +21,7 @@ export const RacketInfiniteContainer: FC<Props> = ({
 }) => {
   const { data, error, isLoading, size, setSize } = useSWRInfinite<IRacket[]>(
     getKey,
-    fetcher,
+    fetcherInfinite,
     {
       revalidateFirstPage: false,
       revalidateIfStale: false,
