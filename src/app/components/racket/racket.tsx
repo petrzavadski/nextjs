@@ -54,6 +54,7 @@ export const Racket: FC<Props> = async ({ id }) => {
           alt={data.name || "Racket image"}
           width={0}
           height={0}
+          loading="lazy"
           className={styles.image}
           unoptimized
         />
