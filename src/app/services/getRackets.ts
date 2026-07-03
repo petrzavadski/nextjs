@@ -5,13 +5,21 @@ import { BASE_API_URL } from "@/app/constants/service";
 type Params = {
   page?: number;
   limit?: number;
+  brand?: string;
 };
 
 export const getRackets = async ({
   page = 1,
   limit = 10,
+  brand = undefined,
 }: Params = {}): Promise<Response<IRacket[]>> => {
-  const url = `${BASE_API_URL}products?page=${page}&limit=${limit}`;
+  let url;
+
+  if (typeof brand === "string") {
+    url = `${BASE_API_URL}products?page=${page}&limit=${limit}&brand=${brand}`;
+  } else {
+    url = `${BASE_API_URL}products?page=${page}&limit=${limit}`;
+  }
 
   const response = await fetch(url, {
     headers: {

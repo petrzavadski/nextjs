@@ -28,13 +28,13 @@ export const Scroller: FC<ScrollerProps> = ({
   userLogin,
 }) => {
   return (
-    <div className={styles.father}>
+    <div className={styles.buttonParent}>
       {children}
       <RacketsLoad rackets={rackets} userLogin={userLogin} />
       {!isReachingEnd && (
         <button
-          className={styles.bookmarkButton}
           disabled={isLoadingMore}
+          className={styles.bookmarkButton}
           onClick={() => setSize(size + 1)}
         >
           Загрузить еще...

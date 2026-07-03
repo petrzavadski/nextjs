@@ -17,7 +17,6 @@ export const fetcherPaginated = async (
   if (typeof path !== "string") throw Error("fetcher expected a string URL");
   const result = await fetch(`${BASE_API_URL}${path}`, {
     credentials: "include",
-    cache: "no-store", // отключаем кэш
   });
 
   if (!result.ok) throw Error(`HTTP ${result.status}: ${result.statusText}`);

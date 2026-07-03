@@ -22,7 +22,7 @@ type RacketData = {
 
 type Props = {
   racket: RacketData;
-  userLogin?: string; // получаем логин пользователя из родителя
+  userLogin?: string;
 };
 
 export const RacketMiniClient: FC<Props> = ({ racket, userLogin }) => {

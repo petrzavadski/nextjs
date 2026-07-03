@@ -10,6 +10,7 @@ export const Header = () => {
       <Link href={"/"}>Главная</Link>
       <Link href={"/rackets"}>Ракетки</Link>
       <Link href={"/top10"}>Топ 10</Link>
+      <Link href={"/rackets-paginated"}>Постраничный просмотр</Link>
       <AuthSection />
       <Link href={"/login"} className={styles.loginLink}>
         <LoginSection />

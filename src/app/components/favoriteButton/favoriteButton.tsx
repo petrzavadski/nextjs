@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useCallback, useState } from "react";
+import { use, useCallback, useTransition } from "react";
 import { UserContext } from "@/app/providers/UserProvider";
 import styles from "./favoriteButton.module.css";
 import { FC } from "react";
@@ -30,50 +30,55 @@ export const FavoriteButton: FC<Props> = ({
     id: racketId,
     isFavoriteInitial,
   });
+  console.log({ isFavorite });
 
-  const [isPending, setIsPending] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleClick = useCallback(async () => {
-    if (isPending) return;
+    startTransition(async () => {
+      if (isPending) return;
 
-    const newFavoriteState = !isFavorite;
+      const newFavoriteState = !isFavorite;
 
-    setIsFavorite({ id: racketId, isFavorite: newFavoriteState });
+      setIsFavorite({ id: racketId, isFavorite: newFavoriteState });
 
-    setIsPending(true);
+      try {
+        // Отправка запроса на сервер
+        const response = await handleFavorite({
+          racketId,
+          isFavorite: newFavoriteState,
+        });
 
-    try {
-      // Отправка запроса на сервер
-      const response = await handleFavorite({
-        racketId,
-        isFavorite: newFavoriteState,
-      });
-
-      if (!response?.ok) {
-        console.error("Ошибка при сохранении:", response?.message);
+        if (!response?.ok) {
+          console.error("Ошибка при сохранении:", response?.message);
+          setIsFavorite({ id: racketId, isFavorite: isFavorite });
+        }
+      } catch (error) {
+        console.error("Ошибка при сохранении:", error);
         setIsFavorite({ id: racketId, isFavorite: isFavorite });
+      } finally {
+        revaliator(racketId);
       }
-    } catch (error) {
-      console.error("Ошибка при сохранении:", error);
-      setIsFavorite({ id: racketId, isFavorite: isFavorite });
-    } finally {
-      revaliator(racketId);
-      setIsPending(false);
-    }
-  }, [isFavorite, racketId, isPending, setIsFavorite]);
+    });
+  }, [isFavorite, racketId, isPending, setIsFavorite, startTransition]);
 
   if (!user || !userLogin) return null;
 
   return (
     <div>
-      <button
-        onClick={handleClick}
-        disabled={isPending}
-        className={`${styles.bookmarkButton} ${isPending ? styles.pending : ""}`}
-      >
-        {isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
-      </button>
-      {isPending && <span> ...Загрузка</span>}
+      {user && (
+        <button
+          disabled={isPending}
+          onClick={handleClick}
+          className={styles.bookmarkButton}
+        >
+          {!isPending
+            ? isFavorite
+              ? "Удалить из избранного"
+              : "Добавить в избранное"
+            : "Загрузка..."}
+        </button>
+      )}
     </div>
   );
 };
