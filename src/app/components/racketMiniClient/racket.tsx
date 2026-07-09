@@ -1,5 +1,5 @@
 // src/app/components/racketMini/racket.tsx
-"use client"; // теперь это клиентский компонент
+"use client";
 
 import { FC } from "react";
 import Image from "next/image";

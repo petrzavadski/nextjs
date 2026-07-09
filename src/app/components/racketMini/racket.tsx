@@ -1,59 +1,43 @@
-import { getRacketById } from "@/app/services/getRacketById";
+"use client";
+
 import { FC } from "react";
 import Image from "next/image";
 import styles from "./racket.module.css";
 import Link from "next/link";
 import { BASE_CLIENT_URL } from "@/app/constants/service";
-import { notFound } from "next/navigation";
 import { FavoriteButton } from "../favoriteButton/favoriteButton";
-import { getUser } from "@/app/services/getUser";
 import { Icon } from "../icon/icon";
 
-type Props = {
+type RacketData = {
   id: string;
+  name: string;
+  imageUrl: string;
+  price: number;
+  userData?: {
+    isFavorite: boolean;
+  };
 };
 
-export const RacketMini: FC<Props> = async ({ id }) => {
-  const { isError, data } = await getRacketById(id);
+type Props = {
+  racket: RacketData;
+  userLogin?: string;
+};
 
-  if (isError) {
-    return (
-      <div className={styles.errorContainer}>
-        <div>Ошибка!!!!</div>
-      </div>
-    );
-  }
+export const RacketMini: FC<Props> = ({ racket, userLogin }) => {
+  const { id, imageUrl, name, userData } = racket;
 
-  if (!data) {
-    return notFound();
-  }
+  console.log({ racket });
 
-  const isFavorite = data?.userData?.isFavorite;
-
-  const response = await getUser();
-  const userRawData = response.data;
-  const userLogin = userRawData?.login;
-
-  if (isError) {
-    return (
-      <div className={styles.errorContainer}>
-        <div>Ошибка!!!!</div>
-      </div>
-    );
-  }
-
-  if (!data) {
-    return notFound();
-  }
+  const isFavorite = userData?.isFavorite ?? false;
 
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
-        <Icon racketId={id} isFavoriteInitial={isFavorite} />
-        <Link href={`${BASE_CLIENT_URL}${id}`}>
+        <Icon racketId={String(id)} isFavoriteInitial={isFavorite} />
+        <Link href={`${BASE_CLIENT_URL}${String(id)}`}>
           <Image
-            src={data.imageUrl}
-            alt={data.name || "Racket image"}
+            src={imageUrl}
+            alt={name || "Racket image"}
             width={0}
             height={0}
             className={styles.image}
@@ -61,7 +45,7 @@ export const RacketMini: FC<Props> = async ({ id }) => {
           />
         </Link>
       </div>
-      <div className={styles.value}>Модель ракетки: {data.name}</div>
+      <div className={styles.value}>Модель ракетки: {name}</div>
 
       {userLogin && (
         <FavoriteButton

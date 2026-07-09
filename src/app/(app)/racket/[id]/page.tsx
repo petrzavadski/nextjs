@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Racket } from "@/app/components/racket/racket";
+import { Racket } from "@/app/components/logoutButton/racket/racket";
 import { Metadata } from "next";
 import { getMetaRacketById } from "@/app/services/getMetaRacketById";
 

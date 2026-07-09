@@ -3,8 +3,8 @@ import { FC } from "react";
 import styles from "./racket.module.css";
 import { notFound } from "next/navigation";
 import { getUser } from "@/app/services/getUser";
-import { Icon } from "../icon/icon";
-import { FavoriteButton } from "../favoriteButton/favoriteButton";
+import { Icon } from "../../icon/icon";
+import { FavoriteButton } from "../../favoriteButton/favoriteButton";
 import Image from "next/image";
 
 type Props = {
