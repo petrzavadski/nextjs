@@ -5,6 +5,7 @@ import { LIMIT } from "../racket-infinite/constants";
 import { getRackets } from "@/app/services/getRackets";
 const Page: FC<PageProps<"/rackets-paginated">> = async ({ searchParams }) => {
   const { page } = await searchParams;
+  const { brand } = await searchParams;
 
   let PageNumber = 1;
 
@@ -15,10 +16,17 @@ const Page: FC<PageProps<"/rackets-paginated">> = async ({ searchParams }) => {
 
   const { data } = await getRackets({ page: PageNumber, limit: LIMIT });
 
+  let url = `products?page=${PageNumber}&LIMIT=${LIMIT}`;
+
+  if (brand) {
+    url += `&brand=${brand}`;
+  }
+  console.log({ data });
+
   return (
     <SWRConfig
       value={{
-        fallback: { [`products?page=${PageNumber}&LIMIT=${LIMIT}`]: data },
+        fallback: { [url]: data },
       }}
     >
       <RacketPaginatedContainer />

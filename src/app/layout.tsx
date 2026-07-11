@@ -2,7 +2,6 @@
 import styles from "./styles.module.css";
 import { Header } from "./components/header/header";
 import { Footer } from "./components/footer/footer";
-// import "./globals.css";
 import { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import { getUser } from "./services/getUser";
@@ -18,14 +17,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data } = await getUser();
+  const { data: initialUser } = await getUser();
 
   return (
     <html lang="en">
       <head>
         <NextTopLoader />
       </head>
-      <UserProvider initialUser={data}>
+      <UserProvider initialUser={initialUser}>
         <body className={styles.content}>
           <Header />
           {children}
