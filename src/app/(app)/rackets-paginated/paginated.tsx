@@ -23,10 +23,13 @@ export const RacketPaginatedContainer = () => {
   const brands = useBrandServer();
   const allBrands = brands?.data;
 
-  let url = `products?page=${page}&LIMIT=${LIMIT}`;
+  let url = `products?page=${page}&limit=${LIMIT}`;
+
+  let urlNext = `products?page=${page + 1}&limit=${LIMIT}`;
 
   if (brand) {
     url += `&brand=${brand}`;
+    urlNext += `&brand=${brand}`;
   }
 
   const { data, isLoading, error } = useSWR(url, fetcherPaginated, {
@@ -35,7 +38,7 @@ export const RacketPaginatedContainer = () => {
     onSuccess: (data) => console.log("success swr data", data),
   });
 
-  const { data: nextPage } = useSWR(url, fetcherPaginated, {
+  const { data: nextPage } = useSWR(urlNext, fetcherPaginated, {
     revalidateIfStale: false,
     onError: (err) => console.error("SWR error", err),
     onSuccess: (data) => console.log("success swr data", data),
@@ -47,10 +50,7 @@ export const RacketPaginatedContainer = () => {
 
   const { user } = context;
 
-  if (!user) return null;
-
   const userLogin = user?.login;
-
   const updatePage = (newPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("limit", LIMIT.toString());
@@ -67,6 +67,11 @@ export const RacketPaginatedContainer = () => {
   if (!data) return "empty";
 
   const hasNext = Array.isArray(nextPage) && nextPage.length !== 0;
+
+  console.log("🔹 Current URL:", url);
+  console.log("🔹 SWR data:", data);
+  console.log("🔹 Brand from searchParams:", brand);
+
   return (
     <div>
       <Brands brands={allBrands} />

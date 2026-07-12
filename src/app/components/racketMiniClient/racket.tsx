@@ -17,7 +17,6 @@ type RacketData = {
   userData?: {
     isFavorite: boolean;
   };
-  // другие поля, если нужны
 };
 
 type Props = {
@@ -32,7 +31,7 @@ export const RacketMiniClient: FC<Props> = ({ racket, userLogin }) => {
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
-        <Icon racketId={id} isFavoriteInitial={isFavorite} />
+        {userLogin && <Icon racketId={id} isFavoriteInitial={isFavorite} />}
         <Link href={`${BASE_CLIENT_URL}${id}`}>
           <Image
             src={imageUrl}

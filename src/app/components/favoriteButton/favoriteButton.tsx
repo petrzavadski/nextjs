@@ -30,7 +30,6 @@ export const FavoriteButton: FC<Props> = ({
     id: racketId,
     isFavoriteInitial,
   });
-  console.log({ isFavorite });
 
   const [isPending, startTransition] = useTransition();
 

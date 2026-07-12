@@ -13,12 +13,10 @@ export const getRackets = async ({
   limit = 10,
   brand = undefined,
 }: Params = {}): Promise<Response<IRacket[]>> => {
-  let url;
+  let url = `${BASE_API_URL}products?page=${page}&limit=${limit}`;
 
-  if (typeof brand === "string") {
-    url = `${BASE_API_URL}products?page=${page}&limit=${limit}&brand=${brand}`;
-  } else {
-    url = `${BASE_API_URL}products?page=${page}&limit=${limit}`;
+  if (brand && typeof brand === "string") {
+    url += `&brand=${brand}`;
   }
 
   const response = await fetch(url, {

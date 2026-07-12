@@ -26,8 +26,6 @@ type Props = {
 export const RacketMini: FC<Props> = ({ racket, userLogin }) => {
   const { id, imageUrl, name, userData } = racket;
 
-  console.log({ racket });
-
   const isFavorite = userData?.isFavorite ?? false;
 
   return (
