@@ -1,10 +1,9 @@
-"use server";
 import { cookies } from "next/headers";
 import { BASE_API_URL } from "../constants/service";
-import { BrandsResponse } from "../types/brands";
 import { Response } from "../types/request";
+import { Brand } from "../types/brands";
 
-export const getBrands = async (): Response<BrandsResponse> => {
+export const getBrands = async (): Response<Brand[]> => {
   const cookieStore = await cookies();
 
   const result = await fetch(`${BASE_API_URL}brands`, {
@@ -22,6 +21,5 @@ export const getBrands = async (): Response<BrandsResponse> => {
 
   const allBrands = await result.json();
 
-  // const resultBrands = data.map((item: IBrands) => item.name);
   return { isError: false, data: allBrands };
 };

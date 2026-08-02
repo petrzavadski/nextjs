@@ -10,9 +10,13 @@ import { Brands } from "@/app/components/brandList/brands";
 import { useRouter } from "next/navigation";
 import { use } from "react";
 import { UserContext } from "@/app/providers/UserContext";
-import { useBrandServer } from "@/app/services/brandServer";
+import { Brand } from "@/app/types/brands";
 
-export const RacketPaginatedContainer = () => {
+type Props = {
+  brands: Brand[] | undefined;
+};
+
+export const RacketPaginatedContainer = ({ brands }: Props) => {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "") || 1;
 
@@ -20,25 +24,13 @@ export const RacketPaginatedContainer = () => {
 
   const router = useRouter();
 
-  const brands = useBrandServer();
-  const allBrands = brands?.data;
-
   let url = `products?page=${page}&limit=${LIMIT}`;
-
-  let urlNext = `products?page=${page + 1}&limit=${LIMIT}`;
 
   if (brand) {
     url += `&brand=${brand}`;
-    urlNext += `&brand=${brand}`;
   }
 
   const { data, isLoading, error } = useSWR(url, fetcherPaginated, {
-    revalidateIfStale: false,
-    onError: (err) => console.error("SWR error", err),
-    onSuccess: (data) => console.log("success swr data", data),
-  });
-
-  const { data: nextPage } = useSWR(urlNext, fetcherPaginated, {
     revalidateIfStale: false,
     onError: (err) => console.error("SWR error", err),
     onSuccess: (data) => console.log("success swr data", data),
@@ -60,24 +52,35 @@ export const RacketPaginatedContainer = () => {
     router.push(`?${params.toString()}`);
   };
 
+  const updateBrand = (newBrandId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+    params.set(
+      "brand",
+      newBrandId === "-- Выберите бренд --" ? "" : newBrandId,
+    );
+
+    params.set("limit", LIMIT.toString());
+
+    window.history.pushState(
+      {},
+      "",
+      `?page=1&brand=${newBrandId}&limit=${LIMIT}`,
+    );
+  };
+
   if (error) return "some error";
 
   if (isLoading) return "swr loading ...";
 
   if (!data) return "empty";
 
-  const hasNext = Array.isArray(nextPage) && nextPage.length !== 0;
-
-  console.log("🔹 Current URL:", url);
-  console.log("🔹 SWR data:", data);
-  console.log("🔹 Brand from searchParams:", brand);
+  const hasNext = data.length === 5;
 
   return (
     <div>
-      <Brands brands={allBrands} />
-
+      <Brands brands={brands} updateBrand={updateBrand} />
       <PaginatedPage data={data} userLogin={userLogin} />
-
       <div>
         {page > 1 && <button onClick={() => updatePage(page - 1)}>PREV</button>}
         <div>Page #{page}</div>

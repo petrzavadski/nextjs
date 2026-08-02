@@ -3,6 +3,7 @@ import { RacketPaginatedContainer } from "./paginated";
 import { SWRConfig } from "swr";
 import { LIMIT } from "../racket-infinite/constants";
 import { getRackets } from "@/app/services/getRackets";
+import { getBrands } from "@/app/services/getBrands";
 const Page: FC<PageProps<"/rackets-paginated">> = async ({ searchParams }) => {
   const { page } = await searchParams;
   const { brand } = await searchParams;
@@ -25,13 +26,19 @@ const Page: FC<PageProps<"/rackets-paginated">> = async ({ searchParams }) => {
     brand: brand?.toString(),
   });
 
+  const brandsData = await getBrands();
+
+  const initialBrands = brandsData?.data ?? [];
+
+  initialBrands.push({ name: "-- Выберите бренд --", id: -1 });
+
   return (
     <SWRConfig
       value={{
         fallback: { [url]: data },
       }}
     >
-      <RacketPaginatedContainer />
+      <RacketPaginatedContainer brands={initialBrands} />
     </SWRConfig>
   );
 };

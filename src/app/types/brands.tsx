@@ -1,8 +1,4 @@
-export interface BrandType {
+export interface Brand {
   id: number;
   name: string;
-}
-
-export interface BrandsResponse {
-  data: BrandType[];
 }
