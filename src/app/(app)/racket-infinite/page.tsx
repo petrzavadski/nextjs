@@ -6,8 +6,21 @@ import { SWRConfig, unstable_serialize } from "swr";
 import { getKey } from "./get-key";
 
 const Page = async () => {
-  const userLogin = await getUserLogin();
-  const initialRackets = await fetcherInfinite("products?page=1&limit=5");
+  let userLogin;
+  let initialRackets;
+
+  const [loginResults, initialRacketsResults] = await Promise.allSettled([
+    getUserLogin(),
+    fetcherInfinite("products?page=1&limit=5"),
+  ]);
+
+  if (loginResults.status === "fulfilled") {
+    userLogin = loginResults.value;
+  }
+
+  if (initialRacketsResults.status === "fulfilled") {
+    initialRackets = initialRacketsResults.value;
+  }
 
   if (!initialRackets) return notFound();
 

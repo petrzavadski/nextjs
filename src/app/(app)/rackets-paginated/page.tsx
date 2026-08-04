@@ -4,9 +4,9 @@ import { SWRConfig } from "swr";
 import { LIMIT } from "../racket-infinite/constants";
 import { getRackets } from "@/app/services/getRackets";
 import { getBrands } from "@/app/services/getBrands";
+
 const Page: FC<PageProps<"/rackets-paginated">> = async ({ searchParams }) => {
-  const { page } = await searchParams;
-  const { brand } = await searchParams;
+  const { page, brand } = await searchParams;
 
   let PageNumber = 1;
 
@@ -20,17 +20,33 @@ const Page: FC<PageProps<"/rackets-paginated">> = async ({ searchParams }) => {
     url += `&brand=${brand.toString()}`;
   }
 
-  const { data } = await getRackets({
-    page: PageNumber,
-    limit: LIMIT,
-    brand: brand?.toString(),
-  });
+  const [racketsResults, brandResult] = await Promise.allSettled([
+    getRackets({
+      page: PageNumber,
+      limit: LIMIT,
+      brand: brand?.toString(),
+    }),
+    getBrands(),
+  ]);
 
-  const brandsData = await getBrands();
+  let data;
 
-  const initialBrands = brandsData?.data ?? [];
+  if (racketsResults.status === "fulfilled") {
+    data = racketsResults.value.data;
+  } else {
+    data = { items: [], total: 0 };
+  }
 
-  initialBrands.push({ name: "-- Выберите бренд --", id: -1 });
+  let brandsData: Array<{ name: string; id: number }> = [];
+
+  if (brandResult.status === "fulfilled") {
+    brandsData = brandResult.value.data ?? [];
+  }
+
+  const initialBrands = [
+    { name: "-- Выберите бренд --", id: -1 },
+    ...brandsData,
+  ];
 
   return (
     <SWRConfig

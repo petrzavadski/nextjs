@@ -2,7 +2,7 @@
 
 import { fetcherPaginated } from "@/app/lib/fetcher";
 import { useSearchParams } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { PaginatedPage } from "./paginated-container";
 
 import { LIMIT } from "../racket-infinite/constants";
@@ -66,6 +66,10 @@ export const RacketPaginatedContainer = ({ brands }: Props) => {
       {},
       "",
       `?page=1&brand=${newBrandId}&limit=${LIMIT}`,
+    );
+
+    mutate(
+      fetcherPaginated(`products?page=1&brand=${newBrandId}&limit=${LIMIT}`),
     );
   };
 
