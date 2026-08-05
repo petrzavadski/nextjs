@@ -3,13 +3,13 @@
 import { FC } from "react";
 import Image from "next/image";
 import styles from "./racket.module.css";
-import { FavoriteButton } from "../favoriteButton/favoriteButton";
+import { FavoriteButton } from "../../favoriteButton/favoriteButton";
 import {
   useHydrateFavorite,
   useIsFavoriteById,
 } from "@/app/providers/FavoriteProvider";
 import { IRacket } from "@/app/types/racket";
-import { Icon } from "../icon/icon";
+import { Icon } from "../../icon/icon";
 import { useRouter } from "next/navigation";
 
 type Props = {

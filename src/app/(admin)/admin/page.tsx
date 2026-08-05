@@ -1,5 +1,5 @@
 "use client";
-import { UserContext } from "@/app/providers/_UserProvider";
+import { UserContext } from "@/app/providers/UserProvider";
 import { redirect } from "next/navigation";
 import { use } from "react";
 

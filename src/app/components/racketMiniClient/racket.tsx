@@ -1,3 +1,4 @@
+// src/app/components/racketMini/racket.tsx
 "use client";
 
 import { FC } from "react";
@@ -23,16 +24,15 @@ type Props = {
   userLogin?: string;
 };
 
-export const RacketMini: FC<Props> = ({ racket, userLogin }) => {
-  const { id, imageUrl, name, userData } = racket;
-
+export const RacketMiniClient: FC<Props> = ({ racket, userLogin }) => {
+  const { id, name, imageUrl, userData } = racket;
   const isFavorite = userData?.isFavorite ?? false;
 
   return (
     <div className={styles.container}>
       <div className={styles.imageWrapper}>
-        <Icon racketId={String(id)} isFavoriteInitial={isFavorite} />
-        <Link href={`${BASE_CLIENT_URL}${String(id)}`}>
+        {userLogin && <Icon racketId={id} isFavoriteInitial={isFavorite} />}
+        <Link href={`${BASE_CLIENT_URL}${id}`}>
           <Image
             src={imageUrl}
             alt={name || "Racket image"}
